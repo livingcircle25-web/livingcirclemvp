@@ -1776,7 +1776,7 @@ async def root():
     return {"app": "Living Circle", "ok": True, "email": EMAIL_ENABLED}
 
 
-@api.get("/api/health")
+@api.get("/health")
 async def health():
     return {"status": "ok", "app": "Living Circle API"}
 
@@ -2023,7 +2023,14 @@ async def seed_if_empty():
 
 
 app.include_router(api)
-app.add_middleware(CORSMiddleware, allow_credentials=True, allow_origins=["*"],
+# Auth uses a Bearer token in the Authorization header, not cookies, so
+# allow_credentials isn't needed — and browsers reject the combination of
+# allow_credentials=True with a wildcard origin anyway. CORS_ORIGINS lets
+# production restrict this to the real deployed frontend domain(s) once known;
+# defaults to "*" for local/dev testing.
+_cors_origins_env = os.environ.get("CORS_ORIGINS", "").strip()
+_cors_origins = [o.strip() for o in _cors_origins_env.split(",") if o.strip()] or ["*"]
+app.add_middleware(CORSMiddleware, allow_credentials=False, allow_origins=_cors_origins,
                    allow_methods=["*"], allow_headers=["*"])
 
 
