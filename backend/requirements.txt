@@ -33,7 +33,7 @@ httpx>=0.27.0
 # confirmed working together on this environment's Python 3.12 interpreter.
 deepface==0.0.100
 tf-keras==2.21.0        # legacy Keras-2 shim some deepface backends require under TF's Keras 3 default
-opencv-python==4.10.0.84  # NOT 5.x — that major version dropped the bundled haarcascade_*.xml data files
+opencv-python-headless==4.10.0.84  # headless: no libGL/Qt GUI deps needed on a server; NOT 5.x — that major version dropped the bundled haarcascade_*.xml data files
 tensorflow==2.21.0
 Pillow>=10.0.0
 scipy>=1.11.2
